@@ -1,3 +1,5 @@
+<img src="ppt2desc_icon.png" width=250>
+
 # ppt2desc
 
 Convert PowerPoint presentations into semantically rich text using Vision Language Models (vLLMs).
