@@ -21,6 +21,7 @@ class GeminiClient:
         
         genai.configure(api_key=self.api_key)
         self.model = genai.GenerativeModel(model)
+        self.model_name = model
 
     def generate(self, prompt: str, image_path: str) -> str:
         """Generate content using Gemini model with an image input.

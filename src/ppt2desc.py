@@ -248,7 +248,7 @@ def process_single_file(
 
         output_data = {
             "deck": os.path.basename(ppt_file),
-            "model": model_instance.__class__.__name__,
+            "model": model_instance.model_name,
             "slides": []
         }
 
