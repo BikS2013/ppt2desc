@@ -19,7 +19,7 @@ ppt2desc is a command-line tool that converts PowerPoint presentations into deta
 
 **Current Model Provider Support**
 - Gemini models via Gemini API
-- Google Cloud Platform Model Garden via Vertex AI Service Accounts
+- Google Cloud Platform Models via Vertex AI Service Accounts
 - *WIP: OpenAI, Claude, Azure, AWS*
 
 ## Prerequisites
@@ -103,7 +103,7 @@ python src/main.py \
     --output_dir ./output \
     --libreoffice_path ./soffice \
     --client gemini \
-    --model gemini-1.5-pro \
+    --model gemini-1.5-flash \
     --rate_limit 30 \
     --instructions "Focus on extracting numerical data from charts and graphs"
 ```
