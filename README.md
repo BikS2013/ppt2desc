@@ -49,7 +49,7 @@ Build from the installer at [LibreOffice's Official Website](https://www.libreof
 
 2. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/ppt2desc.git
+git clone https://github.com/ALucek/ppt2desc.git
 cd ppt2desc
 ```
 
@@ -71,7 +71,7 @@ Basic usage with Gemini API:
 python src/main.py \
     --input_dir /path/to/presentations \
     --output_dir /path/to/output \
-    --libreoffice_path ./soffice \
+    --libreoffice_path /path/to/soffice \
     --client gemini \
     --api_key YOUR_GEMINI_API_KEY
 ```
