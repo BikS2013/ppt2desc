@@ -19,8 +19,9 @@ ppt2desc is a command-line tool that converts PowerPoint presentations into deta
 
 **Current Model Provider Support**
 - Gemini models via Gemini API
+- OpenAI Models via OpenAI API
 - Google Cloud Platform Models via Vertex AI Service Accounts
-- *WIP: OpenAI, Claude, Azure, AWS*
+- *WIP: Claude, Azure, AWS*
 
 ## Prerequisites
 

@@ -5,6 +5,7 @@ from pathlib import Path
 
 from llm.gemini import GeminiClient
 from llm.vertex import VertexAIClient
+from llm.openai import OpenAIClient
 from processor import process_input_path
 
 def parse_args(input_args=None):
@@ -28,14 +29,14 @@ def parse_args(input_args=None):
         "--client",
         type=str,
         default="gemini",
-        choices=["gemini", "vertexai"],
-        help="LLM client to use: 'gemini' or 'vertexai'"
+        choices=["gemini", "vertexai", "openai"],
+        help="LLM client to use: 'gemini', 'vertexai', or 'openai"
     )
     parser.add_argument(
         "--model",
         type=str,
         default="gemini-1.5-flash",
-        help="Currently supported models: gemini-1.5-flash, gemini-1.5-pro"
+        help="Currently supported models: gemini-1.5-flash, gemini-1.5-pro, gpt-4o, gpt-4o-mini, chatgpt-4o-latest, gpt-4-turbo"
     )
     parser.add_argument(
         "--instructions",
@@ -126,6 +127,9 @@ def main():
                 model=args.model
             )
             logger.info(f"Initialized VertexAIClient for project: {args.gcp_project_id}")
+        elif args.client == "openai":
+            model_instance = OpenAIClient(api_key=args.api_key, model=args.model)
+            logger.info(f"Initialized OpenAIClient with model: {args.model}")
         else:
             logger.error(f"Unsupported client specified: {args.client}")
             sys.exit(1)
