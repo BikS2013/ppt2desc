@@ -3,6 +3,7 @@ import logging
 import tempfile
 from pathlib import Path
 from typing import List, Tuple
+from tqdm import tqdm
 
 from converters.ppt_converter import convert_pptx_to_pdf
 from converters.pdf_converter import convert_pdf_to_images
@@ -48,7 +49,8 @@ def process_single_file(
             # Sort images by slide number (we know "slide_{page_num + 1}.png" format)
             image_paths.sort(key=lambda p: int(p.stem.split('_')[1]))
 
-            for idx, image_path in enumerate(image_paths, start=1):
+            # Initialize tqdm progress bar
+            for idx, image_path in enumerate(tqdm(image_paths, desc=f"Processing slides for {ppt_file.name}", unit="slide"), start=1):
                 # Rate-limit logic
                 if min_interval > 0:
                     current_time = time.time()
@@ -69,8 +71,8 @@ def process_single_file(
                         number=idx,
                         content="ERROR: Failed to process slide"
                     ))
-            
-            logger.info(f"Successfully converted {ppt_file.name} to {len(slides_data)} png files.")
+
+            logger.info(f"Successfully converted {ppt_file.name} to {len(slides_data)} slides.")
 
             # 4) Build pydantic model and save JSON
             deck_data = DeckData(
