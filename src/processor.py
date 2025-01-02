@@ -2,21 +2,23 @@ import time
 import logging
 import tempfile
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Union
 from tqdm import tqdm
 
+from llm import LLMClient
 from converters.ppt_converter import convert_pptx_to_pdf
 from converters.pdf_converter import convert_pdf_to_images
-from llm.gemini import GeminiClient
 from schemas.deck import DeckData, SlideData
 
+# Create a type alias for all possible clients
 logger = logging.getLogger(__name__)
+
 
 def process_single_file(
     ppt_file: Path,
     output_dir: Path,
     libreoffice_path: Path,
-    model_instance: GeminiClient,
+    model_instance: LLMClient,
     rate_limit: int,
     prompt: str
 ) -> Tuple[Path, List[Path]]:
@@ -95,7 +97,7 @@ def process_input_path(
     input_path: Path,
     output_dir: Path,
     libreoffice_path: Path,
-    model_instance: GeminiClient,
+    model_instance: LLMClient,
     rate_limit: int,
     prompt: str
 ) -> List[Tuple[Path, List[Path]]]:
