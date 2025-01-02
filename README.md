@@ -6,7 +6,7 @@ Convert PowerPoint presentations into semantically rich text using Vision Langua
 
 ## Overview
 
-ppt2desc is a command-line tool that transforms PowerPoint presentations into detailed textual descriptions. PowerPoint presentations are an inherently visual medium that often convey complex ideas through a combination of text, graphics, charts, and other visual layouts. This tool uses vision language models to not only transcribe the textual content but also interpret and describe the visual elements and their relationships, capturing the full semantic meaning of each slide in a machine-readable format.
+ppt2desc is a command-line tool that converts PowerPoint presentations into detailed textual descriptions. PowerPoint presentations are an inherently visual medium that often convey complex ideas through a combination of text, graphics, charts, and other visual layouts. This tool uses vision language models to not only transcribe the textual content but also interpret and describe the visual elements and their relationships, capturing the full semantic meaning of each slide in a machine-readable format.
 
 ## Features
 
