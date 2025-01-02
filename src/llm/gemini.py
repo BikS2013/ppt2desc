@@ -56,7 +56,7 @@ class GeminiClient:
             # If using the google.generativeai library's generate_content method:
             # pass [prompt, image] in the format required by the library
             response = self.model.generate_content([prompt, image])
-            return response
+            return response.text
 
         except Exception as e:
             raise Exception(f"Failed to generate content with Gemini model: {e}")

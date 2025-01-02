@@ -61,7 +61,7 @@ def process_single_file(
                     response = model_instance.generate(prompt, image_path)
                     slides_data.append(SlideData(
                         number=idx,
-                        content=response.text
+                        content=response
                     ))
                 except Exception as e:
                     logger.error(f"Error generating content for slide {idx}: {str(e)}")
