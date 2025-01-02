@@ -7,6 +7,7 @@ from llm.gemini import GeminiClient
 from llm.vertex import VertexAIClient
 from llm.openai import OpenAIClient
 from llm.anthropic import AnthropicClient
+from llm.azure import AzureClient
 
 from processor import process_input_path
 
@@ -31,8 +32,8 @@ def parse_args(input_args=None):
         "--client",
         type=str,
         default="gemini",
-        choices=["gemini", "vertexai", "openai", "anthropic"],
-        help="LLM client to use: 'gemini', 'vertexai', 'openai', or 'anthropic'"
+        choices=["gemini", "vertexai", "openai", "anthropic", "azure"],
+        help="LLM client to use: 'gemini', 'vertexai', 'openai', 'azure', or 'anthropic'"
     )
     parser.add_argument(
         "--model",
@@ -88,6 +89,30 @@ def parse_args(input_args=None):
         default=None,
         help="Path to JSON credentials for GCP service account"
     )
+    parser.add_argument(
+        "--azure_openai_api_key",
+        type=str,
+        default=None,
+        help="Value for AZURE_OPENAI_KEY if not set in env"
+    )
+    parser.add_argument(
+        "--azure_openai_endpoint",
+        type=str,
+        default=None,
+        help="Value for AZURE_OPENAI_ENDPOINT if not set in env"
+    )
+    parser.add_argument(
+        "--azure_deployment_name",
+        type=str,
+        default=None,
+        help="Name of your Azure deployment"
+    )
+    parser.add_argument(
+        "--azure_api_version",
+        type=str,
+        default="2023-12-01-preview",
+        help="Azure API version"
+    )
 
     args = parser.parse_args(input_args) if input_args else parser.parse_args()
     return args
@@ -135,6 +160,14 @@ def main():
         elif args.client == "anthropic":
             model_instance = AnthropicClient(api_key=args.api_key, model=args.model)
             logger.info(f"Initialized AnthropicClient with model: {args.model}")
+        elif args.client == "azure":
+            model_instance = AzureClient(
+                api_key=args.azure_openai_api_key,
+                endpoint=args.azure_openai_endpoint,
+                deployment=args.azure_deployment_name,
+                api_version=args.azure_api_version
+            )
+            logger.info(f"Initialized AzureClient for deployment: {args.azure_deployment_name}")
         else:
             logger.error(f"Unsupported client specified: {args.client}")
             sys.exit(1)

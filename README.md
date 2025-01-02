@@ -22,7 +22,8 @@ ppt2desc is a command-line tool that converts PowerPoint presentations into deta
 - GPT Models via OpenAI API
 - Claude Models via Anthropic API
 - Google Cloud Platform Models via Vertex AI Service Accounts
-- *WIP: Azure, AWS*
+- GPT Models via Microsoft Azure AI Foundry Deployments
+- *WIP: AWS*
 
 ## Prerequisites
 
@@ -96,6 +97,12 @@ Vertex AI-specific Arguments:
 - `--gcp_region`: GCP region for Vertex AI service (e.g., us-central1)
 - `--gcp_application_credentials`: Path to GCP service account JSON credentials file
 
+Azure AI Foundry-specific Arguments:
+- `--azure_openai_api_key`: Azure AI Foundry Resource Key 1 or Key 2
+- `--azure_openai_endpoint`: Azure AI Foundry deployment service endpoint link
+- `--azure_deployment_name`: The name of your model deployment
+- `--azure_api_version`: Azure API Version (Default: "2023-12-01-preview")
+
 ### Example Commands
 
 Using Gemini API:
@@ -122,6 +129,19 @@ python src/main.py \
     --gcp_application_credentials ./service-account.json \
     --model gemini-1.5-pro \
     --instructions "Extract detailed information from technical diagrams"
+```
+Using Azure AI Foundry:
+```bash
+python src/main.py \
+    --input_dir test_files/ppt_testing \
+    --output_dir test_files/ppt_testing \
+    --libreoffice_path ./soffice \
+    --client azure \
+    --azure_openai_api_key 1234567890 \
+    --azure_openai_endpoint 'https://example-endpoint-001.openai.azure.com/' \
+    --azure_deployment_name gpt-4o \
+    --azure_api_version 2023-12-01-preview \
+    --rate_limit 60
 ```
 
 ## Output Format
@@ -166,6 +186,13 @@ For Vertex AI:
 2. Grant necessary permissions (typically, "Vertex AI User" role)
 3. Download the service account JSON key file
 4. Provide the credentials file path via `--gcp_application_credentials`
+
+For Azure OpenAI Foundry:
+1. Create an Azure OpenAI Resource
+2. Navigate to Azure AI Foundry and choose the subscription and Azure OpenAI Resource to work with
+3. Under management select deployments
+4. Select create new deployment and conffigure with your vision LLM
+5. Provide deployment name, API key, endpoint, and api version via `--azure_deployment_name`, `--azure_openai_api_key`, `--azure_openai_endpoint`, `--azure_api_version`,
 
 ## Contributing
 
