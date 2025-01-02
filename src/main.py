@@ -6,6 +6,8 @@ from pathlib import Path
 from llm.gemini import GeminiClient
 from llm.vertex import VertexAIClient
 from llm.openai import OpenAIClient
+from llm.anthropic import AnthropicClient
+
 from processor import process_input_path
 
 def parse_args(input_args=None):
@@ -29,14 +31,14 @@ def parse_args(input_args=None):
         "--client",
         type=str,
         default="gemini",
-        choices=["gemini", "vertexai", "openai"],
-        help="LLM client to use: 'gemini', 'vertexai', or 'openai"
+        choices=["gemini", "vertexai", "openai", "anthropic"],
+        help="LLM client to use: 'gemini', 'vertexai', 'openai', or 'anthropic'"
     )
     parser.add_argument(
         "--model",
         type=str,
         default="gemini-1.5-flash",
-        help="Currently supported models: gemini-1.5-flash, gemini-1.5-pro, gpt-4o, gpt-4o-mini, chatgpt-4o-latest, gpt-4-turbo"
+        help="Suggested models: gemini-1.5-flash, gemini-1.5-pro, gpt-4o, claude-3-5-sonnet-latest"
     )
     parser.add_argument(
         "--instructions",
@@ -130,6 +132,9 @@ def main():
         elif args.client == "openai":
             model_instance = OpenAIClient(api_key=args.api_key, model=args.model)
             logger.info(f"Initialized OpenAIClient with model: {args.model}")
+        elif args.client == "anthropic":
+            model_instance = AnthropicClient(api_key=args.api_key, model=args.model)
+            logger.info(f"Initialized AnthropicClient with model: {args.model}")
         else:
             logger.error(f"Unsupported client specified: {args.client}")
             sys.exit(1)
