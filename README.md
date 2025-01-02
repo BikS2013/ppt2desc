@@ -2,7 +2,7 @@
 
 # ppt2desc
 
-Convert PowerPoint presentations into semantically rich text using Vision Language Models (vLLMs).
+Convert PowerPoint presentations into semantically rich text using Vision Language Models.
 
 ## Overview
 
@@ -150,13 +150,14 @@ You can modify the base prompt by editing `src/prompt.txt` or providing addition
 python src/main.py \
     --input_dir ./presentations \
     --output_dir ./output \
+    --libreoffice_path ./soffice \
     --instructions "Include mathematical equations and formulas in LaTeX format"
 ```
 
 ### Authentication
 
-For Gemini API:
-- Set your API key via the `--api_key` argument or through an environment variable
+For Consumer APIs:
+- Set your API key via the `--api_key` argument or through your respective provider's environment variables
 
 For Vertex AI:
 1. Create a service account in your GCP project
