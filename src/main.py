@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 
 from llm.gemini import GeminiClient
+from llm.vertex import VertexAIClient
 from processor import process_input_path
 
 def parse_args(input_args=None):
@@ -22,6 +23,13 @@ def parse_args(input_args=None):
         default=None,
         required=True,
         help="Path to input directory or PPT file"
+    )
+    parser.add_argument(
+        "--client",
+        type=str,
+        default="gemini",
+        choices=["gemini", "vertexai"],
+        help="LLM client to use: 'gemini' or 'vertexai'"
     )
     parser.add_argument(
         "--model",
@@ -59,6 +67,24 @@ def parse_args(input_args=None):
         default=None,
         help="API key for the LLM. If not provided, the environment variable may be used."
     )
+    parser.add_argument(
+        "--gcp_region",
+        type=str,
+        default=None,
+        help="GCP Region for connecting to vertex AI service account."
+    )
+    parser.add_argument(
+        "--gcp_project_id",
+        type=str,
+        default=None,
+        help="GCP project id for connecting to vertex AI service account."
+    )
+    parser.add_argument(
+        "--gcp_application_credentials",
+        type=str,
+        default=None,
+        help="Path to JSON credentials for GCP service account"
+    )
 
     args = parser.parse_args(input_args) if input_args else parser.parse_args()
     return args
@@ -89,8 +115,20 @@ def main():
 
     # ---- 4) Initialize model instance ----
     try:
-        model_instance = GeminiClient(api_key=args.api_key, model=args.model)
-        logger.info(f"Initialized GeminiClient with model: {args.model}")
+        if args.client == "gemini":
+            model_instance = GeminiClient(api_key=args.api_key, model=args.model)
+            logger.info(f"Initialized GeminiClient with model: {args.model}")
+        elif args.client == "vertexai":
+            model_instance = VertexAIClient(
+                credentials_path=args.gcp_application_credentials,
+                project_id=args.gcp_project_id,
+                region=args.gcp_region,
+                model=args.model
+            )
+            logger.info(f"Initialized VertexAIClient for project: {args.gcp_project_id}")
+        else:
+            logger.error(f"Unsupported client specified: {args.client}")
+            sys.exit(1)
     except Exception as e:
         logger.error(f"Failed to initialize model: {str(e)}")
         sys.exit(1)

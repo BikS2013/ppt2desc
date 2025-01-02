@@ -19,13 +19,14 @@ ppt2desc is a command-line tool that converts PowerPoint presentations into deta
 
 **Current Model Provider Support**
 - Gemini models via Gemini API
-- *WIP: OpenAI, Claude, GCP*
+- Google Cloud Platform Model Garden via Vertex AI Service Accounts
+- *WIP: OpenAI, Claude, Azure, AWS*
 
 ## Prerequisites
 
 - Python 3.9 or higher
 - LibreOffice (for PPT/PPTX to PDF conversion)
-- vLLM model provider API key
+- vLLM API credentials
 
 ## Installation
 
@@ -65,32 +66,60 @@ pip install -r requirements.txt
 
 ## Usage
 
-Basic usage:
+Basic usage with Gemini API:
 ```bash
-python src/main.py --input_dir /path/to/presentations --output_dir /path/to/output --libreoffice_path /path/to/libreoffice
+python src/main.py \
+    --input_dir /path/to/presentations \
+    --output_dir /path/to/output \
+    --libreoffice_path ./soffice \
+    --client gemini \
+    --api_key YOUR_GEMINI_API_KEY
 ```
 
 ### Command Line Arguments
 
+General Arguments:
 - `--input_dir`: Path to input directory or PPT file (required)
 - `--output_dir`: Output directory path (required)
+- `--client`: LLM client to use: 'gemini' or 'vertexai' (default: "gemini")
 - `--model`: Model to use (default: "gemini-1.5-flash")
 - `--instructions`: Additional instructions for the model
 - `--libreoffice_path`: Path to LibreOffice installation
 - `--rate_limit`: API calls per minute (default: 60)
 - `--prompt_path`: Custom prompt file path
-- `--api_key`: vLLM provider API key (if not set via environment variable)
+- `--api_key`: Model Provider API key (if not set via environment variable)
 
-### Example
+Vertex AI-specific Arguments:
+- `--gcp_project_id`: GCP project ID for Vertex AI service account
+- `--gcp_region`: GCP region for Vertex AI service (e.g., us-central1)
+- `--gcp_application_credentials`: Path to GCP service account JSON credentials file
 
+### Example Commands
+
+Using Gemini API:
 ```bash
 python src/main.py \
     --input_dir ./presentations \
     --output_dir ./output \
-    --libreoffice_path /Applications/LibreOffice.app/Contents/MacOS/soffice \
+    --libreoffice_path ./soffice \
+    --client gemini \
     --model gemini-1.5-pro \
     --rate_limit 30 \
     --instructions "Focus on extracting numerical data from charts and graphs"
+```
+
+Using Vertex AI:
+```bash
+python src/main.py \
+    --input_dir ./presentations \
+    --output_dir ./output \
+    --client vertexai \
+    --libreoffice_path ./soffice \
+    --gcp_project_id my-project-123 \
+    --gcp_region us-central1 \
+    --gcp_application_credentials ./service-account.json \
+    --model gemini-1.5-pro \
+    --instructions "Extract detailed information from technical diagrams"
 ```
 
 ## Output Format
@@ -121,9 +150,19 @@ You can modify the base prompt by editing `src/prompt.txt` or providing addition
 python src/main.py \
     --input_dir ./presentations \
     --output_dir ./output \
-    --libreoffice_path /path/to/libreoffice \
     --instructions "Include mathematical equations and formulas in LaTeX format"
 ```
+
+### Authentication
+
+For Gemini API:
+- Set your API key via the `--api_key` argument or through an environment variable
+
+For Vertex AI:
+1. Create a service account in your GCP project
+2. Grant necessary permissions (typically, "Vertex AI User" role)
+3. Download the service account JSON key file
+4. Provide the credentials file path via `--gcp_application_credentials`
 
 ## Contributing
 
