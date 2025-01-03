@@ -4,6 +4,7 @@ import tempfile
 from pathlib import Path
 from typing import List, Tuple, Union
 from tqdm import tqdm
+import shutil
 
 from llm import LLMClient
 from converters.ppt_converter import convert_pptx_to_pdf
@@ -20,7 +21,9 @@ def process_single_file(
     libreoffice_path: Path,
     model_instance: LLMClient,
     rate_limit: int,
-    prompt: str
+    prompt: str,
+    save_pdf: bool = False,
+    save_images: bool = False
 ) -> Tuple[Path, List[Path]]:
     """
     Process a single PowerPoint file:
@@ -28,6 +31,7 @@ def process_single_file(
       2) Convert PDF to images
       3) Send images to LLM
       4) Save the JSON output
+      5) Optionally save PDF and images to output directory
     """
     with tempfile.TemporaryDirectory() as temp_dir_str:
         temp_dir = Path(temp_dir_str)
@@ -86,6 +90,22 @@ def process_single_file(
             output_file.write_text(deck_data.model_dump_json(indent=2), encoding='utf-8')
             logger.info(f"Output written to {output_file}")
 
+            # 5) Optionally save PDF
+            if save_pdf:
+                destination_pdf = output_dir / pdf_path.name
+                shutil.copy2(pdf_path, destination_pdf)
+                logger.info(f"Saved PDF to {destination_pdf}")
+
+            # 6) Optionally save images
+            if save_images:
+                # Create a subfolder named after the PPT file
+                images_subdir = output_dir / ppt_file.stem
+                images_subdir.mkdir(parents=True, exist_ok=True)
+                for img_path in image_paths:
+                    destination_img = images_subdir / img_path.name
+                    shutil.copy2(img_path, destination_img)
+                logger.info(f"Saved images to {images_subdir}")
+
             return (ppt_file, image_paths)
 
         except Exception as ex:
@@ -99,34 +119,41 @@ def process_input_path(
     libreoffice_path: Path,
     model_instance: LLMClient,
     rate_limit: int,
-    prompt: str
+    prompt: str,
+    save_pdf: bool = False,
+    save_images: bool = False
 ) -> List[Tuple[Path, List[Path]]]:
     """
     Process one or more PPT files from the specified path.
+    Optionally save PDFs and images to the output directory.
     """
     results = []
 
     if input_path.is_file():
         if input_path.suffix.lower() in ('.ppt', '.pptx'):
             res = process_single_file(
-                input_path,
-                output_dir,
-                libreoffice_path,
-                model_instance,
-                rate_limit,
-                prompt
+                ppt_file=input_path,
+                output_dir=output_dir,
+                libreoffice_path=libreoffice_path,
+                model_instance=model_instance,
+                rate_limit=rate_limit,
+                prompt=prompt,
+                save_pdf=save_pdf,
+                save_images=save_images
             )
             results.append(res)
     else:
         # Process all PPT / PPTX files in directory
         for ppt_file in input_path.glob('*.ppt*'):
             res = process_single_file(
-                ppt_file,
-                output_dir,
-                libreoffice_path,
-                model_instance,
-                rate_limit,
-                prompt
+                ppt_file=ppt_file,
+                output_dir=output_dir,
+                libreoffice_path=libreoffice_path,
+                model_instance=model_instance,
+                rate_limit=rate_limit,
+                prompt=prompt,
+                save_pdf=save_pdf,
+                save_images=save_images
             )
             results.append(res)
 

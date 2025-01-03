@@ -130,6 +130,18 @@ def parse_args(input_args=None):
         default="us-east-1",
         help="Region for AWS Bedrock Instance"
     )
+    parser.add_argument(
+        "--save_pdf",
+        action='store_true',
+        default=False,
+        help="Save converted PDF files in the output directory"
+    )
+    parser.add_argument(
+        "--save_images",
+        action='store_true',
+        default=False,
+        help="Save extracted images in a subfolder within the output directory named after the presentation"
+    )
 
     args = parser.parse_args(input_args) if input_args else parser.parse_args()
     return args
@@ -217,7 +229,9 @@ def main():
         libreoffice_path=libreoffice_path,
         model_instance=model_instance,
         rate_limit=args.rate_limit,
-        prompt=prompt
+        prompt=prompt,
+        save_pdf=args.save_pdf,
+        save_images=args.save_images
     )
 
     # ---- 6) Log Summary ----
