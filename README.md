@@ -84,7 +84,7 @@ python src/main.py \
 General Arguments:
 - `--input_dir`: Path to input directory or PPT file (required)
 - `--output_dir`: Output directory path (required)
-- `--client`: LLM client to use: 'gemini', 'vertexai', 'anthropic', 'azure', 'aws' or 'openai' (default: "gemini")
+- `--client`: LLM client to use: 'gemini', 'vertexai', 'anthropic', 'azure', 'aws' or 'openai' (required)
 - `--model`: Model to use (default: "gemini-1.5-flash")
 - `--instructions`: Additional instructions for the model
 - `--libreoffice_path`: Path to LibreOffice installation

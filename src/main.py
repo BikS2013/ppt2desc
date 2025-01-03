@@ -32,7 +32,7 @@ def parse_args(input_args=None):
     parser.add_argument(
         "--client",
         type=str,
-        default="gemini",
+        required=True,
         choices=["gemini", "vertexai", "openai", "anthropic", "azure", "aws"],
         help="LLM client to use: 'gemini', 'vertexai', 'openai', 'azure', 'aws', or 'anthropic'"
     )
@@ -127,6 +127,7 @@ def parse_args(input_args=None):
     parser.add_argument(
         "--aws_region",
         type=str,
+        default="us-east-1",
         help="Region for AWS Bedrock Instance"
     )
 
