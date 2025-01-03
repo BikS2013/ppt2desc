@@ -8,6 +8,7 @@ from llm.vertex import VertexAIClient
 from llm.openai import OpenAIClient
 from llm.anthropic import AnthropicClient
 from llm.azure import AzureClient
+from llm.aws import AWSClient
 
 from processor import process_input_path
 
@@ -32,8 +33,8 @@ def parse_args(input_args=None):
         "--client",
         type=str,
         default="gemini",
-        choices=["gemini", "vertexai", "openai", "anthropic", "azure"],
-        help="LLM client to use: 'gemini', 'vertexai', 'openai', 'azure', or 'anthropic'"
+        choices=["gemini", "vertexai", "openai", "anthropic", "azure", "aws"],
+        help="LLM client to use: 'gemini', 'vertexai', 'openai', 'azure', 'aws', or 'anthropic'"
     )
     parser.add_argument(
         "--model",
@@ -113,6 +114,21 @@ def parse_args(input_args=None):
         default="2023-12-01-preview",
         help="Azure API version"
     )
+    parser.add_argument(
+        "--aws_access_key_id",
+        type=str,
+        help="AWS User Access Key"
+    )
+    parser.add_argument(
+        "--aws_secret_access_key",
+        type=str,
+        help="AWS User Secret Access Key"
+    )
+    parser.add_argument(
+        "--aws_region",
+        type=str,
+        help="Region for AWS Bedrock Instance"
+    )
 
     args = parser.parse_args(input_args) if input_args else parser.parse_args()
     return args
@@ -168,6 +184,14 @@ def main():
                 api_version=args.azure_api_version
             )
             logger.info(f"Initialized AzureClient for deployment: {args.azure_deployment_name}")
+        elif args.client == "aws":
+            model_instance = AWSClient(
+                access_key_id=args.aws_access_key_id,
+                secret_access_key=args.aws_secret_access_key,
+                region=args.aws_region,
+                model=args.model
+            )
+            logger.info(f"Initialized AWSClient in region: {args.aws_region} with model {args.model}")
         else:
             logger.error(f"Unsupported client specified: {args.client}")
             sys.exit(1)

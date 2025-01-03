@@ -21,9 +21,10 @@ ppt2desc is a command-line tool that converts PowerPoint presentations into deta
 - Gemini models via Google Gemini API
 - GPT Models via OpenAI API
 - Claude Models via Anthropic API
-- Gemini Models via Google Cloud Platform Vertex AI Service Accounts
+- Gemini Models via Google Cloud Platform Vertex AI
 - GPT Models via Microsoft Azure AI Foundry Deployments
-- *WIP: AWS*
+- Nova Models via Amazon Web Services's Amazon Bedrock
+- *WIP: AWS Bedrock Claude Support*
 
 ## Prerequisites
 
@@ -84,7 +85,7 @@ python src/main.py \
 General Arguments:
 - `--input_dir`: Path to input directory or PPT file (required)
 - `--output_dir`: Output directory path (required)
-- `--client`: LLM client to use: 'gemini', 'vertexai', 'anthropic', or 'openai' (default: "gemini")
+- `--client`: LLM client to use: 'gemini', 'vertexai', 'anthropic', 'azure', 'aws' or 'openai' (default: "gemini")
 - `--model`: Model to use (default: "gemini-1.5-flash")
 - `--instructions`: Additional instructions for the model
 - `--libreoffice_path`: Path to LibreOffice installation
@@ -92,16 +93,21 @@ General Arguments:
 - `--prompt_path`: Custom prompt file path
 - `--api_key`: Model Provider API key (if not set via environment variable)
 
-Vertex AI-specific Arguments:
+Vertex AI Specific Arguments:
 - `--gcp_project_id`: GCP project ID for Vertex AI service account
 - `--gcp_region`: GCP region for Vertex AI service (e.g., us-central1)
 - `--gcp_application_credentials`: Path to GCP service account JSON credentials file
 
-Azure AI Foundry-specific Arguments:
+Azure AI Foundry Specific Arguments:
 - `--azure_openai_api_key`: Azure AI Foundry Resource Key 1 or Key 2
 - `--azure_openai_endpoint`: Azure AI Foundry deployment service endpoint link
 - `--azure_deployment_name`: The name of your model deployment
 - `--azure_api_version`: Azure API Version (Default: "2023-12-01-preview")
+
+AWS Amazon Bedrock Specific Arguments:
+- `--aws_access_key_id"`: Bedrock Account Access Key
+- `--aws_secret_access_key`: Bedrock Account Account Secret Access Key
+- `--aws_region`: AWS Bedrock Region
 
 ### Example Commands
 
@@ -133,14 +139,28 @@ python src/main.py \
 Using Azure AI Foundry:
 ```bash
 python src/main.py \
-    --input_dir test_files/ppt_testing \
-    --output_dir test_files/ppt_testing \
+    --input_dir ./presentations \
+    --output_dir ./output \
     --libreoffice_path ./soffice \
     --client azure \
-    --azure_openai_api_key 1234567890 \
+    --azure_openai_api_key 123456790ABCDEFG \
     --azure_openai_endpoint 'https://example-endpoint-001.openai.azure.com/' \
     --azure_deployment_name gpt-4o \
     --azure_api_version 2023-12-01-preview \
+    --rate_limit 60
+```
+
+Using AWS Amazon Bedrock:
+```bash
+python src/main.py \
+    --input_dir ./presentations \
+    --output_dir ./output \
+    --libreoffice_path ./soffice \
+    --client aws \
+    --model us.amazon.nova-lite-v1:0 \
+    --aws_access_key_id 123456790ABCDEFG \
+    --aws_secret_access_key 123456790ABCDEFG \
+    --aws_region us-east-1 \
     --rate_limit 60
 ```
 
