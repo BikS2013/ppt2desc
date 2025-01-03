@@ -23,8 +23,7 @@ ppt2desc is a command-line tool that converts PowerPoint presentations into deta
 - Claude Models via Anthropic API
 - Gemini Models via Google Cloud Platform Vertex AI
 - GPT Models via Microsoft Azure AI Foundry Deployments
-- Nova Models via Amazon Web Services's Amazon Bedrock
-- *WIP: AWS Bedrock Claude Support*
+- Nova & Claude Models via Amazon Web Services's Amazon Bedrock
 
 ## Prerequisites
 
@@ -224,6 +223,11 @@ For AWS Bedrock:
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+**Todo**
+- Self hosted libreoffice connection
+- AWS Llama Vision Support Confirmation
+- Combination of JSON files across multiple ppts
 
 ## License
 

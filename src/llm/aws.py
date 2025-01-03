@@ -1,12 +1,8 @@
 import os
-import json
-import base64
 from pathlib import Path
 from typing import Optional, Union
 
 import boto3
-
-
 class AWSClient:
     """
     A client wrapper around AWS Bedrock Runtime API.
@@ -16,7 +12,7 @@ class AWSClient:
             access_key_id="YOUR_ACCESS_KEY",
             secret_access_key="YOUR_SECRET_KEY",
             region="us-east-1",
-            model="amazon.nova-pro-v1:0"
+            model="amazon.nova-pro-v1:0"  # or any Claude model
         )
         text_response = client.generate(prompt="Hello World", image_path="path/to/image.png")
     """
@@ -36,7 +32,7 @@ class AWSClient:
         :param secret_access_key: Optional AWS secret access key. If not provided,
                                 checks AWS_SECRET_ACCESS_KEY environment variable.
         :param region: AWS region name. If not provided, checks AWS_REGION environment variable.
-        :param model: The model ID (e.g., "amazon.nova-pro-v1:0").
+        :param model: The model ID (e.g., "amazon.nova-pro-v1:0" or any Claude model).
         :raises ValueError: If required parameters are missing.
         """
         self.access_key_id = access_key_id or os.environ.get("AWS_ACCESS_KEY_ID")
@@ -79,7 +75,7 @@ class AWSClient:
         :return: Base64 encoded string of the image
         """
         with open(image_path, "rb") as image_file:
-            return base64.b64encode(image_file.read()).decode("utf-8")
+            return image_file.read()
 
     def generate(self, prompt: str, image_path: Union[str, Path]) -> str:
         """
@@ -100,39 +96,33 @@ class AWSClient:
             # Encode the image to base64
             base64_image = self._encode_image(image_path_obj)
 
-            # Create the message list for the request
-            message_list = [
+            # Create the messages list
+            messages = [
                 {
                     "role": "user",
                     "content": [
                         {
-                            "image": {
-                                "format": "png",
-                                "source": {"bytes": base64_image},
-                            }
+                            "text": prompt
                         },
                         {
-                            "text": prompt
+                            "image": {
+                                "format": "png",
+                                "source": {
+                                    "bytes": base64_image
+                                }
+                            }
                         }
-                    ],
+                    ]
                 }
             ]
 
-            # Create the native request format
-            request_body = {
-                "schemaVersion": "messages-v1",
-                "messages": message_list,
-            }
-
-            # Invoke the model
-            response = self.client.invoke_model(
+            # Invoke the model using converse
+            response = self.client.converse(
                 modelId=self.model_id,
-                body=json.dumps(request_body)
+                messages=messages
             )
-            
-            # Parse the response
-            model_response = json.loads(response["body"].read())
-            return model_response["output"]["message"]["content"][0]["text"]
+
+            return response["output"]["message"]["content"][0]["text"]
 
         except Exception as e:
             raise Exception(f"Failed to generate content with AWS model: {e}")
