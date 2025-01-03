@@ -94,7 +94,6 @@ General Arguments:
 - `--save_pdf`: Include to save the converted PDF in your output folder
 - `--save_images`: Include to save the individual slide images in your output folder
 
---save_images \
 Vertex AI Specific Arguments:
 - `--gcp_project_id`: GCP project ID for Vertex AI service account
 - `--gcp_region`: GCP region for Vertex AI service (e.g., us-central1)
