@@ -105,7 +105,7 @@ Azure AI Foundry Specific Arguments:
 - `--azure_api_version`: Azure API Version (Default: "2023-12-01-preview")
 
 AWS Amazon Bedrock Specific Arguments:
-- `--aws_access_key_id"`: Bedrock Account Access Key
+- `--aws_access_key_id`: Bedrock Account Access Key
 - `--aws_secret_access_key`: Bedrock Account Account Secret Access Key
 - `--aws_region`: AWS Bedrock Region
 
@@ -202,7 +202,7 @@ For Consumer APIs:
 - Set your API key via the `--api_key` argument or through your respective provider's environment variables
 
 For Vertex AI:
-1. Create a service account in your GCP project
+1. Create a service account in your GCP project IAM
 2. Grant necessary permissions (typically, "Vertex AI User" role)
 3. Download the service account JSON key file
 4. Provide the credentials file path via `--gcp_application_credentials`
@@ -211,8 +211,15 @@ For Azure OpenAI Foundry:
 1. Create an Azure OpenAI Resource
 2. Navigate to Azure AI Foundry and choose the subscription and Azure OpenAI Resource to work with
 3. Under management select deployments
-4. Select create new deployment and conffigure with your vision LLM
+4. Select create new deployment and configure with your vision LLM
 5. Provide deployment name, API key, endpoint, and api version via `--azure_deployment_name`, `--azure_openai_api_key`, `--azure_openai_endpoint`, `--azure_api_version`,
+
+For AWS Bedrock:
+1. Request access to serverless model deployments in Amazon Bedrock's model catalog
+2. Create a user in your AWS IAM
+3. Enable Amazon Bedrock access policies for your user
+4. Save User Credentials access key and secret access key
+5. Provide user's credentials via `--aws_access_key_id`, and `--aws_secret_access_key`
 
 ## Contributing
 
