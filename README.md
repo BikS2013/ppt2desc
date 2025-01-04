@@ -35,13 +35,19 @@ ppt2desc is a command-line tool that converts PowerPoint presentations into deta
 
 ## Installation
 
-1. Installing LibreOffice
+1. Clone the repository:
+```bash
+git clone https://github.com/ALucek/ppt2desc.git
+cd ppt2desc
+```
+
+2. Installing LibreOffice
 
 LibreOffice is a critical dependency for this tool as it handles the headless conversion of PowerPoint files to PDF format
 
 **Option 1: Local Installation**
 
-**Ubuntu/Debian:**
+**Linux Systems:**
 ```bash
 sudo apt install libreoffice
 ```
@@ -63,12 +69,6 @@ docker-compose up -d
 ```
 
 This command will build the Docker image based on the provided [Dockerfile](./src/libreoffice_docker/) and start the container in detached mode. The LibreOffice conversion service will be accessible at`http://localhost:2002`.
-
-2. Clone the repository:
-```bash
-git clone https://github.com/ALucek/ppt2desc.git
-cd ppt2desc
-```
 
 3. Create and activate a virtual environment:
 ```bash
