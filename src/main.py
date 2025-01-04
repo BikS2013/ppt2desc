@@ -142,6 +142,12 @@ def parse_args(input_args=None):
         default=False,
         help="Save extracted images in a subfolder within the output directory named after the presentation"
     )
+    parser.add_argument(
+        "--libreoffice_url",
+        type=str,
+        default="http://localhost:2002",
+        help="If provided, uses the Docker container's endpoint (e.g., http://localhost:2002) for PPT->PDF conversion."
+    )
 
     args = parser.parse_args(input_args) if input_args else parser.parse_args()
     return args
@@ -222,11 +228,30 @@ def main():
         # If no path is provided, assume 'libreoffice' is in PATH
         libreoffice_path = Path("libreoffice")
 
-    # ---- 5) Process input path ----
+    # ---- 5) Identify local vs. container-based conversion ----
+    if args.libreoffice_url:
+        logger.info(f"Using Docker-based LibreOffice at: {args.libreoffice_url}")
+        libreoffice_endpoint = args.libreoffice_url
+        # We'll pass this URL into the processor so it knows to do remote conversion
+        libreoffice_path = None
+    else:
+        # If no URL is provided, assume local path
+        if args.libreoffice_path:
+            libreoffice_path = Path(args.libreoffice_path)
+        else:
+            libreoffice_path = Path("libreoffice")
+        libreoffice_endpoint = None
+
+    input_path = Path(args.input_dir)
+    output_dir = Path(args.output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    # ---- 6) Process input path ----
     results = process_input_path(
         input_path=input_path,
         output_dir=output_dir,
         libreoffice_path=libreoffice_path,
+        libreoffice_endpoint=libreoffice_endpoint,
         model_instance=model_instance,
         rate_limit=args.rate_limit,
         prompt=prompt,

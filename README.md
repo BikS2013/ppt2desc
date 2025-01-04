@@ -29,6 +29,8 @@ ppt2desc is a command-line tool that converts PowerPoint presentations into deta
 
 - Python 3.9 or higher
 - LibreOffice (for PPT/PPTX to PDF conversion)
+  - Option 1: Install LibreOffice locally.
+  - Option 2: Use the provided Docker container for LibreOffice.
 - vLLM API credentials
 
 ## Installation
@@ -36,6 +38,8 @@ ppt2desc is a command-line tool that converts PowerPoint presentations into deta
 1. Installing LibreOffice
 
 LibreOffice is a critical dependency for this tool as it handles the headless conversion of PowerPoint files to PDF format
+
+**Option 1: Local Installation**
 
 **Ubuntu/Debian:**
 ```bash
@@ -49,6 +53,16 @@ brew install libreoffice
 
 **Windows:**
 Build from the installer at [LibreOffice's Official Website](https://www.libreoffice.org/download/download/)
+
+**Option 2: Docker-based Installation**
+
+a. Ensure you have [Docker](https://www.docker.com/) installed on your system
+b. Run the following command
+```bash
+docker-compose up -d
+```
+
+This command will build the Docker image based on the provided [Dockerfile](./src/libreoffice_docker/) and start the container in detached mode. The LibreOffice conversion service will be accessible at`http://localhost:2002`.
 
 2. Clone the repository:
 ```bash
@@ -88,6 +102,7 @@ General Arguments:
 - `--model`: Model to use (default: "gemini-1.5-flash")
 - `--instructions`: Additional instructions for the model
 - `--libreoffice_path`: Path to LibreOffice installation
+- `--libreoffice_url`: Url for docker-based libreoffice installation (default: http://localhost:2002)
 - `--rate_limit`: API calls per minute (default: 60)
 - `--prompt_path`: Custom prompt file path
 - `--api_key`: Model Provider API key (if not set via environment variable)
@@ -185,6 +200,28 @@ The tool generates JSON files with the following structure:
 
 ## Advanced Usage
 
+### Using Docker-based LibreOffice Conversion
+
+When using the Docker container for LibreOffice, you can use the `--libreoffice_url` argument to direct the conversion process to the container's API endpoint, rather than a local installation.
+
+```bash
+python src/main.py \
+    --input_dir ./presentations \
+    --output_dir ./output \
+    --libreoffice_url http://localhost:2002 \
+    --client vertexai \
+    --model gemini-1.5-pro \
+    --gcp_project_id my-project-123 \
+    --gcp_region us-central1 \
+    --gcp_application_credentials ./service-account.json \
+    --rate_limit 30 \
+    --instructions "Extract detailed information from technical diagrams" \
+    --save_pdf \
+    --save_images
+```
+
+You should use either `--libreoffice_url` or `--libreoffice_path` but not both.
+
 ### Custom Prompts
 
 You can modify the base prompt by editing `src/prompt.txt` or providing additional instructions via the command line:
@@ -227,7 +264,6 @@ For AWS Bedrock:
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 **Todo**
-- Self hosted libreoffice connection
 - AWS Llama Vision Support Confirmation
 - Combination of JSON files across multiple ppts
 
