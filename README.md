@@ -52,23 +52,23 @@ LibreOffice is a critical dependency for this tool as it handles the headless co
 sudo apt install libreoffice
 ```
 
-**macOS:**
+macOS:
 ```bash
 brew install libreoffice
-```
+```  
 
-**Windows:**
+Windows:  
 Build from the installer at [LibreOffice's Official Website](https://www.libreoffice.org/download/download/)
 
 **Option 2: Docker-based Installation**
 
-a. Ensure you have [Docker](https://www.docker.com/) installed on your system
+a. Ensure you have [Docker](https://www.docker.com/) installed on your system  
 b. Run the following command
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
-This command will build the Docker image based on the provided [Dockerfile](./src/libreoffice_docker/) and start the container in detached mode. The LibreOffice conversion service will be accessible at`http://localhost:2002`.
+This command will build the Docker image based on the provided [Dockerfile](./src/libreoffice_docker/) and start the container in detached mode. The LibreOffice conversion service will be accessible at`http://localhost:2002`. Take down with `docker compose down`.
 
 3. Create and activate a virtual environment:
 ```bash
