@@ -264,8 +264,10 @@ For AWS Bedrock:
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 **Todo**
+- Better Docker Setup
 - AWS Llama Vision Support Confirmation
 - Combination of JSON files across multiple ppts
+- Dynamic font understanding (i.e. struggles when font that ppt is using is not installed on machine)
 
 ## License
 

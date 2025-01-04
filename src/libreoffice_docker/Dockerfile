@@ -7,9 +7,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libreoffice \
     fonts-dejavu \
     fonts-liberation \
+    fonts-noto \
+    fonts-noto-color-emoji \
+    curl \
     fontconfig \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+RUN fc-cache -f -v
 
 RUN useradd --create-home libreoffice
 
