@@ -145,7 +145,7 @@ def parse_args(input_args=None):
     parser.add_argument(
         "--libreoffice_url",
         type=str,
-        default="http://localhost:2002",
+        default=None,
         help="If provided, uses the Docker container's endpoint (e.g., http://localhost:2002) for PPT->PDF conversion."
     )
 

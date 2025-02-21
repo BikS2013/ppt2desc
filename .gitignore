@@ -3,3 +3,4 @@ test_files
 .env
 __pycache__/
 .DS_Store
+ppts/
