@@ -102,7 +102,7 @@ General Arguments:
 - `--model`: Model to use (default: "gemini-1.5-flash")
 - `--instructions`: Additional instructions for the model
 - `--libreoffice_path`: Path to LibreOffice installation
-- `--libreoffice_url`: Url for docker-based libreoffice installation (default: http://localhost:2002)
+- `--libreoffice_url`: Url for docker-based libreoffice installation (configured: http://localhost:2002)
 - `--rate_limit`: API calls per minute (default: 60)
 - `--prompt_path`: Custom prompt file path
 - `--api_key`: Model Provider API key (if not set via environment variable)
