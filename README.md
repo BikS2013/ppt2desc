@@ -264,6 +264,7 @@ For AWS Bedrock:
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 **Todo**
+- Handling google's new genai SDK for a unified gemini/vertex experience
 - Better Docker Setup
 - AWS Llama Vision Support Confirmation
 - Combination of JSON files across multiple ppts
