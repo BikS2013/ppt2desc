@@ -3,8 +3,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from llm.gemini import GeminiClient
-from llm.vertex import VertexAIClient
+from llm.google_unified import GoogleUnifiedClient
 from llm.openai import OpenAIClient
 from llm.anthropic import AnthropicClient
 from llm.azure import AzureClient
@@ -179,16 +178,23 @@ def main():
     # ---- 4) Initialize model instance ----
     try:
         if args.client == "gemini":
-            model_instance = GeminiClient(api_key=args.api_key, model=args.model)
-            logger.info(f"Initialized GeminiClient with model: {args.model}")
+            # Using the new unified client for Gemini
+            model_instance = GoogleUnifiedClient(
+                api_key=args.api_key, 
+                model=args.model,
+                use_vertex=False
+            )
+            logger.info(f"Initialized Google GenAI Client (Gemini API) with model: {args.model}")
         elif args.client == "vertexai":
-            model_instance = VertexAIClient(
+            # Using the new unified client for Vertex AI
+            model_instance = GoogleUnifiedClient(
                 credentials_path=args.gcp_application_credentials,
                 project_id=args.gcp_project_id,
                 region=args.gcp_region,
-                model=args.model
+                model=args.model,
+                use_vertex=True
             )
-            logger.info(f"Initialized VertexAIClient for project: {args.gcp_project_id}")
+            logger.info(f"Initialized Google GenAI Client (Vertex AI) for project: {args.gcp_project_id}")
         elif args.client == "openai":
             model_instance = OpenAIClient(api_key=args.api_key, model=args.model)
             logger.info(f"Initialized OpenAIClient with model: {args.model}")

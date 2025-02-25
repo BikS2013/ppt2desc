@@ -1,13 +1,15 @@
 from .base import LLMClient
 from .anthropic import AnthropicClient
-from .gemini import GeminiClient
+from .google_unified import GoogleUnifiedClient
 from .openai import OpenAIClient
-from .vertex import VertexAIClient
+from .azure import AzureClient
+from .aws import AWSClient
 
 __all__ = [
     "LLMClient",
     "AnthropicClient", 
-    "GeminiClient",
+    "GoogleUnifiedClient",
     "OpenAIClient",
-    "VertexAIClient"
+    "AzureClient",
+    "AWSClient"
 ]
